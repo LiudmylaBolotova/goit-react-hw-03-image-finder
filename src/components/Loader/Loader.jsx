@@ -4,8 +4,8 @@ import style from '../Loader/Loader.module.css';
 export const Loader = () => {
     return (
       <Circles
-        height="100"
-        width="100"
+        height="150"
+        width="150"
         color="blue"
         ariaLabel="circles-loading"
         wrapperStyle={{}}

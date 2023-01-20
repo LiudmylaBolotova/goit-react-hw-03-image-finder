@@ -30,7 +30,7 @@ export class ImageGallery extends Component {
         .then(res => {
           this.setState(prevState => ({
             status: 'resolved',
-            images:  [...prevState.images, ...res.data.hits],
+            images: [...res.data.hits, ...prevState.images],
           }));
         })
         .catch(error => {
@@ -38,7 +38,7 @@ export class ImageGallery extends Component {
         });
     }
 
-    if (prevValue !== nextValue ) {
+    if (prevValue !== nextValue) {
       this.setState({
         images: [],
         page: 1,
@@ -73,17 +73,15 @@ export class ImageGallery extends Component {
       return (
         <>
           <ul className={style.gallery}>
-            <ImageGalleryItem images={images}></ImageGalleryItem>
+            <ImageGalleryItem images={this.state.images}></ImageGalleryItem>
           </ul>
-          <Button onClick={this.LoadMore}></Button>
+          <Button type="button" onClick={this.LoadMore}></Button>
         </>
       );
     }
 
     if (status === 'rejected' || images.length === 0) {
-    
       return (
-        
         <h2 className={style.galleryTextError}>
           We didn't find the picture you were looking for :( Please try again!
         </h2>

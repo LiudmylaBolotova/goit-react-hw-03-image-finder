@@ -1,9 +1,8 @@
-// import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 import { Component } from 'react';
 import { ImSearch } from 'react-icons/im';
 
 import style from '../Searchbar/Searchbar.module.css';
-
 
 const initialState = {
   inputValue: '',
@@ -46,8 +45,6 @@ export class Searchbar extends Component {
             type="text"
             value={this.state.inputValue}
             onChange={this.handleChangeInput}
-            // autocomplete="off"
-            // autofocus
             placeholder="Search images and photos"
           />
         </form>
@@ -56,3 +53,6 @@ export class Searchbar extends Component {
   }
 }
 
+Searchbar.propTypes = {
+  onSubmit: propTypes.func.isRequired,
+};

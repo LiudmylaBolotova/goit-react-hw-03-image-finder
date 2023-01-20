@@ -6,18 +6,18 @@ import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 
 export class App extends Component {
   state = {
-inputValue: '',
+    inputValue: '',
   };
 
-  handleFormSubmit = (inputValue) => {
-this.setState({inputValue})
-  }
+  handleFormSubmit = inputValue => {
+    this.setState({ inputValue });
+  };
 
   render() {
     return (
       <div className={style.app}>
         <Searchbar onSubmit={this.handleFormSubmit}></Searchbar>
-       
+
         <ImageGallery inputValue={this.state.inputValue}></ImageGallery>
       </div>
     );

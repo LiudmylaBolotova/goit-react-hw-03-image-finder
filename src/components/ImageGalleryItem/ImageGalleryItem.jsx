@@ -1,27 +1,61 @@
 import propTypes from 'prop-types';
+import { Modal } from '../Modal/Modal';
 import style from '../ImageGalleryItem/ImageGalleryItem.module.css';
+import { Component } from 'react';
 
-export const ImageGalleryItem = ({ images }) => {
-  return (
-    <>
-      {images.map(image => (
-        <li key={image.id} className={style.imageGalleryItem}>
-          <img
-            src={image.webformatURL}
-            alt={image.tags}
-            className={style.imageGalleryItemImage}
-          />
-        </li>
-      ))}
-    </>
-  );
-};
+export class ImageGalleryItem extends Component {
+  state = {
+    isModalOpen: false,
+  };
+
+  toggleOpen = () => {
+    this.setState({ isModalOpen: !this.state.isModalOpen });
+  };
+
+  openModalImage = e => {
+    if (e.target.nodeName === 'IMG') {
+      this.setState({ isModalOpen: true });
+    }
+  };
+
+  render() {
+    return (
+      <>
+        {this.props.images.map(image => (
+          <div key={image.id}>
+            <li className={style.imageGalleryItem}>
+              <img
+                id={image.url}
+                src={image.webformatURL}
+                url={image.largeImageURL}
+                alt={image.tags}
+                className={style.imageGalleryItemImage}
+                onClick={this.openModalImage}
+              />
+            </li>
+            {this.state.isModalOpen && (
+              <Modal onClose={this.toggleOpen}>
+                <img
+                  src={image.largeImageURL}
+                  alt={image.alt}
+                  width={800}
+                  height={400}
+                />
+              </Modal>
+            )}
+          </div>
+        ))}
+      </>
+    );
+  }
+}
 
 ImageGalleryItem.propTypes = {
   images: propTypes.arrayOf(
     propTypes.shape({
       id: propTypes.number.isRequired,
       webformatURL: propTypes.string.isRequired,
+      largeImageURL: propTypes.string.isRequired,
       alt: propTypes.string,
     })
   ),
