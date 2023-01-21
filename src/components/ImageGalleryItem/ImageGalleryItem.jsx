@@ -27,27 +27,33 @@ export class ImageGalleryItem extends Component {
               <img
                 id={image.url}
                 src={image.webformatURL}
-                url={image.largeImageURL}
+                large={image.largeImageURL}
                 alt={image.tags}
                 className={style.imageGalleryItemImage}
                 onClick={this.openModalImage}
               />
             </li>
+            {/* Не можу передати велике зображення, на яке клікнули - передається останнє */}
             {this.state.isModalOpen && (
               <Modal onClose={this.toggleOpen}>
                 <img
                   src={image.largeImageURL}
                   alt={image.alt}
                   width={800}
-                  height={400}
+                  height={450}
                 />
               </Modal>
             )}
           </div>
         ))}
+
+       
       </>
     );
+    
   }
+
+  
 }
 
 ImageGalleryItem.propTypes = {
