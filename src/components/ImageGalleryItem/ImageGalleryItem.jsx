@@ -21,39 +21,34 @@ export class ImageGalleryItem extends Component {
   render() {
     return (
       <>
-        {this.props.images.map(image => (
-          <div key={image.id}>
-            <li className={style.imageGalleryItem}>
-              <img
-                id={image.url}
-                src={image.webformatURL}
-                large={image.largeImageURL}
-                alt={image.tags}
-                className={style.imageGalleryItemImage}
-                onClick={this.openModalImage}
-              />
-            </li>
-            {/* Не можу передати велике зображення, на яке клікнули - передається останнє */}
-            {this.state.isModalOpen && (
-              <Modal onClose={this.toggleOpen}>
+        {this.props.images.map(
+          ({ webformatURL, largeImageURL, tags, id }) => (
+            <div key={id}>
+              <li className={style.imageGalleryItem}>
                 <img
-                  src={image.largeImageURL}
-                  alt={image.alt}
-                  width={800}
-                  height={450}
+                  src={webformatURL}
+                  alt={tags}
+                  className={style.imageGalleryItemImage}
+                  onClick={this.openModalImage}
                 />
-              </Modal>
-            )}
-          </div>
-        ))}
-
-       
+              </li>
+              {/* Не можу передати велике зображення, на яке клікнули - передається останнє */}
+              {this.state.isModalOpen && (
+                <Modal onClose={this.toggleOpen}>
+                  <img
+                    src={largeImageURL}
+                    alt={tags}
+                    width={800}
+                    height={450}
+                  />
+                </Modal>
+              )}
+            </div>
+          )
+        )}
       </>
     );
-    
   }
-
-  
 }
 
 ImageGalleryItem.propTypes = {
