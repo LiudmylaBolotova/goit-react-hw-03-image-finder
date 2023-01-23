@@ -6,6 +6,11 @@ import { Component } from 'react';
 export class ImageGalleryItem extends Component {
   state = {
     isModalOpen: false,
+    isActiveImg: 0,
+  };
+
+  makeActiveImg = index => {
+    this.setState({ isActiveImg: index });
   };
 
   toggleOpen = () => {
@@ -19,33 +24,36 @@ export class ImageGalleryItem extends Component {
   };
 
   render() {
+    const activeImg = this.props.images[this.state.isActiveImg];
+
     return (
       <>
-        {this.props.images.map(
-          ({ webformatURL, largeImageURL, tags, id }) => (
-            <div key={id}>
-              <li className={style.imageGalleryItem}>
+        {this.props.images.map(({ webformatURL, tags, id }, index) => (
+          <div key={id}>
+            <li
+              className={style.imageGalleryItem}
+              onClick={() => this.makeActiveImg(index)}
+            >
+              <img
+                src={webformatURL}
+                alt={tags}
+                className={style.imageGalleryItemImage}
+                onClick={this.openModalImage}
+              />
+            </li>
+
+            {this.state.isModalOpen && (
+              <Modal onClose={this.toggleOpen}>
                 <img
-                  src={webformatURL}
+                  src={activeImg.largeImageURL}
                   alt={tags}
-                  className={style.imageGalleryItemImage}
-                  onClick={this.openModalImage}
+                  width={800}
+                  height={450}
                 />
-              </li>
-              {/* Не можу передати велике зображення, на яке клікнули - передається останнє */}
-              {this.state.isModalOpen && (
-                <Modal onClose={this.toggleOpen}>
-                  <img
-                    src={largeImageURL}
-                    alt={tags}
-                    width={800}
-                    height={450}
-                  />
-                </Modal>
-              )}
-            </div>
-          )
-        )}
+              </Modal>
+            )}
+          </div>
+        ))}
       </>
     );
   }
