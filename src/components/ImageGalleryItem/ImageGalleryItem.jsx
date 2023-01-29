@@ -21,6 +21,7 @@ export class ImageGalleryItem extends Component {
     if (e.target.nodeName === 'IMG') {
       this.setState({ isModalOpen: true });
     }
+   
   };
 
   render() {
@@ -47,8 +48,8 @@ export class ImageGalleryItem extends Component {
                 <img
                   src={activeImg.largeImageURL}
                   alt={tags}
-                  width={800}
-                  height={450}
+                  width={850}
+                  height={500}
                 />
               </Modal>
             )}
