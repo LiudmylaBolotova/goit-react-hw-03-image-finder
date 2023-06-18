@@ -2,6 +2,7 @@ import propTypes from 'prop-types';
 import { Modal } from '../Modal/Modal';
 import style from '../ImageGalleryItem/ImageGalleryItem.module.css';
 import { Component } from 'react';
+import { nanoid } from 'nanoid';
 
 export class ImageGalleryItem extends Component {
   state = {
@@ -21,7 +22,6 @@ export class ImageGalleryItem extends Component {
     if (e.target.nodeName === 'IMG') {
       this.setState({ isModalOpen: true });
     }
-   
   };
 
   render() {
@@ -29,8 +29,8 @@ export class ImageGalleryItem extends Component {
 
     return (
       <>
-        {this.props.images.map(({ webformatURL, tags, id }, index) => (
-          <div key={id}>
+        {this.props.images.map(({ webformatURL, tags }, index) => (
+          <div key={nanoid()}>
             <li
               className={style.imageGalleryItem}
               onClick={() => this.makeActiveImg(index)}

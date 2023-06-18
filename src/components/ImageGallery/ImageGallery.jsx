@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { fetchImages } from '../../services';
 import { Loader } from 'components/Loader/Loader';
 import propTypes from 'prop-types';
 import style from '../ImageGallery/ImageGallery.module.css';
@@ -12,39 +12,44 @@ export class ImageGallery extends Component {
     page: 1,
     status: 'idle',
     error: null,
+    inputValue: '',
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     const prevValue = prevProps.inputValue;
     const nextValue = this.props.inputValue;
     const prevPage = prevState.page;
     const nextPage = this.state.page;
 
-    if (prevValue !== nextValue || prevPage !== nextPage) {
-      this.setState({ status: 'pending' });
-
-      axios
-        .get(
-          `https://pixabay.com/api/?q=${nextValue}&page=${nextPage}&key=29672596-80b7f00160ec49143013d00d9&image_type=photo&orientation=horizontal&per_page=12`
-        )
-        .then(res => {
-          this.setState(prevState => ({
-            status: 'resolved',
-            images: [...res.data.hits, ...prevState.images],
-          }));
-        })
-        .catch(error => {
-          this.setState({ error, status: 'rejected' });
-        });
-    }
-
     if (prevValue !== nextValue) {
       this.setState({
+        status: 'pending',
         images: [],
         page: 1,
-        status: 'idle',
-        error: null,
+        inputValue: nextValue,
       });
+
+      try {
+        const res = await fetchImages(nextValue, nextPage);
+        this.setState(prevState => ({
+          status: 'resolved',
+          images: [...prevState.images, ...res.hits],
+        }));
+      } catch (error) {
+        this.setState({ error, status: 'rejected' });
+      }
+    } else if (prevPage !== nextPage) {
+      this.setState({ status: 'pending' });
+
+      try {
+        const res = await fetchImages(nextValue, nextPage);
+        this.setState(prevState => ({
+          status: 'resolved',
+          images: [...prevState.images, ...res.hits],
+        }));
+      } catch (error) {
+        this.setState({ error, status: 'rejected' });
+      }
     }
   }
 
@@ -66,7 +71,7 @@ export class ImageGallery extends Component {
     }
 
     if (status === 'pending') {
-      return <Loader></Loader>;
+      return <Loader />;
     }
 
     if (status === 'resolved' && images.length > 0) {
